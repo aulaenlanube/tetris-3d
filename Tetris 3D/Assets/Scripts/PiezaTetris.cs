@@ -21,7 +21,7 @@ public class PosicionTetris
     {
         this.fila = fila;
         this.columna = columna;
-        this.profundidad = 0;
+        this.profundidad = Random.Range(-Tetris.instance.SeparacionMaximaPieza/2, Tetris.instance.SeparacionMaximaPieza / 2);
     }
 
     public Vector3 Posicionar()
@@ -57,14 +57,14 @@ public class PiezaTetris : MonoBehaviour
         tetris = Tetris.instance;
 
         //generamos un tipo de pieza
-        tipoPieza = Random.Range(0, 5) switch
+        tipoPieza = Random.Range(0, tetris.piezaDistintas) switch
         {
             0 => TipoPieza.PiezaI,
-            1 => TipoPieza.PiezaL,
-            2 => TipoPieza.PiezaO,
+            1 => TipoPieza.PiezaO,
+            2 => TipoPieza.PiezaL,
             3 => TipoPieza.PiezaS,
             4 => TipoPieza.PiezaT,
-            _ => TipoPieza.PiezaO
+            _ => TipoPieza.PiezaI
         };
 
         //se puede mover
@@ -369,7 +369,8 @@ public class PiezaTetris : MonoBehaviour
             }
         }
 
-        //bajamos todos los cubos 1 unidad
+        //bajamos todos los cubos 1 unidad, todos NOOOOO, LOS DE LA FILA ACTUAL HACIA ARRIBA
+        //NO SIRVE EL TAG --> SABÍA QUE EL TAG ERA UN CHAPUZAAA
         GameObject[] cubos = GameObject.FindGameObjectsWithTag("cubo");
         foreach(GameObject cubo in cubos)
         {
