@@ -330,28 +330,28 @@ public class PiezaTetris : MonoBehaviour
 
     private void EliminarFilasCompletadas()
     {
-        for (int i = 0; i < tetris.tablero.Length; i++)
+        for (int fila = 0; fila < tetris.altoTablero; fila++)
         {
             int elementosFila = 0;
-            for (int j = 0; j < tetris.tablero[i].Length; j++)
+            for (int columna = 0; columna < tetris.anchoTablero; columna++)
             {
-                if (tetris.tablero[i][j]) elementosFila++;
+                if (tetris.tablero[fila][columna]) elementosFila++;
 
                 //si es la última posición de la fila y están todas ocupadas
-                if (j == tetris.tablero[i].Length - 1 && elementosFila == tetris.anchoTablero)
+                if (columna == tetris.anchoTablero - 1 && elementosFila == tetris.anchoTablero)
                 {
-                    //eliminamos cubos y bajamos todo el tablero
-                    BajarFila();
+                    //eliminamos cubos y bajamos la parte superior del tablero respecto a la fila que debemos eliminar
+                    BajarFila(fila);
                     return;
                 }
             }
         }
     }
 
-    private void BajarFila()
+    private void BajarFila(int fila)
     {
-        //ajustamos tablero
-        for (int i = 0; i < tetris.tablero.Length; i++)
+        //ajustamos tablero a partir de la fila actual
+        for (int i = fila; i < tetris.tablero.Length; i++)
         {
             for (int j = 0; j < tetris.tablero[i].Length; j++)
             {
