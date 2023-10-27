@@ -142,6 +142,9 @@ public class PiezaTetris : MonoBehaviour
         cubo3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cubo4 = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
+        //coloreamos los cubos
+        EstablecerColorCubos();
+
         //añadimos tags
         cubo1.tag = "cubo";
         cubo2.tag = "cubo";
@@ -377,5 +380,35 @@ public class PiezaTetris : MonoBehaviour
         EliminarFilasCompletadas();
     }
 
-    
+    private void EstablecerColorCubos()
+    {
+        switch (tipoPieza)
+        {
+            case TipoPieza.PiezaL:
+                EstablecerColor(Color.blue);
+                break;
+            case TipoPieza.PiezaS:
+                EstablecerColor(Color.red);
+                break;
+            case TipoPieza.PiezaI:
+                EstablecerColor(Color.cyan);
+                break;
+            case TipoPieza.PiezaT:
+                EstablecerColor(Color.green);
+                break;
+            case TipoPieza.PiezaO:
+                EstablecerColor(Color.yellow);
+                break;
+        }
+    }
+
+    private void EstablecerColor(Color c)
+    {
+        cubo1.GetComponent<Renderer>().material.color = c;
+        cubo2.GetComponent<Renderer>().material.color = c;
+        cubo3.GetComponent<Renderer>().material.color = c;
+        cubo4.GetComponent<Renderer>().material.color = c;
+    }
+
+
 }
