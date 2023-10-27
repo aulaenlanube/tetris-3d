@@ -15,16 +15,18 @@ public class PosicionTetris
 {
     public int fila;
     public int columna;
+    public float profundidad;
 
     public PosicionTetris(int fila, int columna)
     {
         this.fila = fila;
         this.columna = columna;
+        this.profundidad = 0;
     }
 
     public Vector3 Posicionar()
     {
-        return new Vector3(columna, fila, 0);
+        return new Vector3(columna, fila, profundidad);
     }
 }
 
@@ -181,11 +183,15 @@ public class PiezaTetris : MonoBehaviour
         {
             MoverDerecha();
         }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            //bajar a tope
+        }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             MoverAbajo();
         }
-    }
+    }    
 
     IEnumerator BajarPieza()
     {
