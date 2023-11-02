@@ -21,7 +21,7 @@ public class PosicionTetris
     {
         this.fila = fila;
         this.columna = columna;
-        this.profundidad = Random.Range(-Tetris.instance.SeparacionMaximaPieza/2, Tetris.instance.SeparacionMaximaPieza / 2);
+        this.profundidad = Random.Range(-Tetris.instance.profundidadPieza / 2, Tetris.instance.profundidadPieza / 2);
     }
 
     public Vector3 Posicionar()
