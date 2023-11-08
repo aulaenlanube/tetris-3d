@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public enum TipoPieza
@@ -47,7 +48,6 @@ public class PiezaTetris : MonoBehaviour
     private PosicionTetris posCentro;
 
     private int maxFila, minFila, maxColumna, minColumna;
-
     private bool bloqueada;
 
     private void Start()
@@ -347,6 +347,7 @@ public class PiezaTetris : MonoBehaviour
                 {
                     //eliminamos cubos y bajamos la parte superior del tablero respecto a la fila que debemos eliminar
                     BajarFila(fila);
+                    tetris.ActualizarPuntuacion();
                     return;
                 }
             }
