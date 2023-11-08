@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum TipoPieza
 {
@@ -191,7 +190,7 @@ public class PiezaTetris : MonoBehaviour
         {
             MoverAbajo();
         }
-    }    
+    }
 
     IEnumerator BajarPieza()
     {
@@ -222,10 +221,10 @@ public class PiezaTetris : MonoBehaviour
     void FijarPieza()
     {
         //ponemos a true las posiciones para ocuparlas
-        tetris.tablero[posCubo1.fila][posCubo1.columna] = true;
-        tetris.tablero[posCubo2.fila][posCubo2.columna] = true;
-        tetris.tablero[posCubo3.fila][posCubo3.columna] = true;
-        tetris.tablero[posCubo4.fila][posCubo4.columna] = true;
+        tetris.tablero[posCubo1.fila][posCubo1.columna] = cubo1;
+        tetris.tablero[posCubo2.fila][posCubo2.columna] = cubo2;
+        tetris.tablero[posCubo3.fila][posCubo3.columna] = cubo3;
+        tetris.tablero[posCubo4.fila][posCubo4.columna] = cubo4;
 
         //deshabilitamos componente
         Destroy(gameObject.GetComponent<PiezaTetris>());
@@ -326,7 +325,7 @@ public class PiezaTetris : MonoBehaviour
         if (!tetris.IndiceValido(indiceFila, indiceColumna)) return false;
 
         //si la posición está a true, está ocupada
-        if (tetris.tablero[indiceFila][indiceColumna])
+        if (tetris.tablero[indiceFila][indiceColumna] != null)
             return false;
 
         //posición válida y libre
@@ -341,7 +340,7 @@ public class PiezaTetris : MonoBehaviour
             int elementosFila = 0;
             for (int columna = 0; columna < tetris.anchoTablero; columna++)
             {
-                if (tetris.tablero[fila][columna]) elementosFila++;
+                if (tetris.tablero[fila][columna] != null) elementosFila++;
 
                 //si es la última posición de la fila y están todas ocupadas
                 if (columna == tetris.anchoTablero - 1 && elementosFila == tetris.anchoTablero)
@@ -359,29 +358,21 @@ public class PiezaTetris : MonoBehaviour
         //ajustamos tablero a partir de la fila actual
         for (int i = fila; i < tetris.tablero.Length; i++)
         {
-            for (int j = 0; j < tetris.tablero[i].Length; j++)
+            for (int j = 0; j < tetris.anchoTablero; j++)
             {
-                //si es la última fila, la de más arriba, lo ponemos todo a false
-                if (i == tetris.tablero.Length - 1) tetris.tablero[i][j] = false;
-                //en el resto de casos, sustituimos el valor actual por el de arriba
-                else
-                    tetris.tablero[i][j] = tetris.tablero[i + 1][j];                
+                //fila que debemos destruir
+                if (i == fila) Destroy(tetris.tablero[i][j]);
+
+                //si no es la última fila, bajamos la de arriba
+                if (i < tetris.tablero.Length - 1) tetris.tablero[i][j] = tetris.tablero[i + 1][j];
+                if (tetris.tablero[i][j] != null) tetris.tablero[i][j].transform.position += Vector3.down;
             }
         }
 
-        //bajamos todos los cubos 1 unidad, todos NOOOOO, LOS DE LA FILA ACTUAL HACIA ARRIBA
-        //NO SIRVE EL TAG --> SABÍA QUE EL TAG ERA UN CHAPUZAAA
+        //eliminamos los que están por debajo de 0
         GameObject[] cubos = GameObject.FindGameObjectsWithTag("cubo");
-        foreach(GameObject cubo in cubos)
-        {
-            cubo.transform.position -= new Vector3(0,1,0);
-        }
-
-        //eliminamos los que están por debajo
         foreach (GameObject cubo in cubos)
-        {
-            if(cubo.transform.position.y < 0) Destroy(cubo);
-        }
+            if (cubo.transform.position.y < 0) Destroy(cubo);        
 
         //comprobamos de nuevo después de modificar
         EliminarFilasCompletadas();
