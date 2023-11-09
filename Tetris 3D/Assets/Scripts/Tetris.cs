@@ -21,6 +21,10 @@ public class Tetris : MonoBehaviour{
         paredDerecha.transform.position = new Vector3(anchoTablero, altoTablero / 2 - 1, 0f);
         paredDerecha.transform.localScale = new Vector3(1f, altoTablero - 1, 1f);
 
+        //movemos la cámara dependiendo del ancho del tablero
+        if (anchoTablero < 12) Camera.main.transform.Translate(Vector3.left * (12 - anchoTablero) / 2);
+        if (anchoTablero > 12) Camera.main.transform.Translate(Vector3.right * (anchoTablero - 12) / 2);
+
         //iniciamos matriz
         for (int i = 0; i < tablero.Length; i++)        {            tablero[i] = new GameObject[anchoTablero];        }
         GenerarPieza();    }    public void ActualizarPuntuacion()
