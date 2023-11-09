@@ -237,6 +237,9 @@ public class PiezaTetris : MonoBehaviour
 
         //generamos nueva pieza
         tetris.GenerarPieza();
+
+        //destruimos la pieza, los 4 cubos son independientes y se quedan en el tablero
+        Destroy(gameObject);
     }
 
     void MoverIzquierda()
@@ -384,25 +387,30 @@ public class PiezaTetris : MonoBehaviour
         switch (tipoPieza)
         {
             case TipoPieza.PiezaL:
-                EstablecerColor(Color.blue);
+                EstablecerColorMaterial(Color.blue);
                 break;
             case TipoPieza.PiezaS:
-                EstablecerColor(Color.red);
+                EstablecerColorMaterial(Color.red);
                 break;
             case TipoPieza.PiezaI:
-                EstablecerColor(Color.cyan);
+                EstablecerColorMaterial(Color.cyan);
                 break;
             case TipoPieza.PiezaT:
-                EstablecerColor(Color.green);
+                EstablecerColorMaterial(Color.green);
                 break;
             case TipoPieza.PiezaO:
-                EstablecerColor(Color.yellow);
+                EstablecerColorMaterial(Color.yellow);
                 break;
         }
     }
 
-    private void EstablecerColor(Color c)
+    private void EstablecerColorMaterial(Color c)
     {
+        cubo1.GetComponent<Renderer>().material = tetris.materialPiezas;
+        cubo2.GetComponent<Renderer>().material = tetris.materialPiezas;
+        cubo3.GetComponent<Renderer>().material = tetris.materialPiezas;
+        cubo4.GetComponent<Renderer>().material = tetris.materialPiezas;
+
         cubo1.GetComponent<Renderer>().material.color = c;
         cubo2.GetComponent<Renderer>().material.color = c;
         cubo3.GetComponent<Renderer>().material.color = c;
