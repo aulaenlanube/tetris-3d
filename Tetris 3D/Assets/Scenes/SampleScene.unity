@@ -643,7 +643,7 @@ MonoBehaviour:
   textoPuntuacion: {fileID: 546296083}
   anchoTablero: 12
   altoTablero: 22
-  velocidad: 0.2
+  velocidad: 1
   profundidadPieza: 0
   piezaDistintas: 5
   materialPiezas: {fileID: 2100000, guid: 1ec889ee48746a34794902b0cda61655, type: 2}
