@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public enum TipoPieza
@@ -49,6 +48,7 @@ public class PiezaTetris : MonoBehaviour
 
     private int maxFila, minFila, maxColumna, minColumna;
     private bool bloqueada;
+    private Coroutine bajarPieza;
 
     private void Start()
     {
@@ -73,7 +73,7 @@ public class PiezaTetris : MonoBehaviour
         PosicionarPieza();
 
         //iniciamos el movimiento de bajada
-        StartCoroutine(BajarPieza());
+        bajarPieza = StartCoroutine(BajarPieza());
     }
 
 
@@ -170,36 +170,36 @@ public class PiezaTetris : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Rotar();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            MoverIzquierda();
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            MoverDerecha();
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            //bajar a tope
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            MoverAbajo();
-        }
+        if (Input.GetKeyDown(KeyCode.Space)) Rotar();
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) MoverIzquierda();
+        if (Input.GetKeyDown(KeyCode.RightArrow)) MoverDerecha();
+        if (Input.GetKeyDown(KeyCode.UpArrow)) MoverArriba();
+        if (Input.GetKeyDown(KeyCode.DownArrow)) MoverAbajo();
     }
 
     IEnumerator BajarPieza()
     {
-        while (true)
+        //si no hay posiciones libres bajo, la partida termina
+        if (!tetris.ComprobarInferioresLibres(posCubo1, posCubo2, posCubo3, posCubo4))
         {
-            if (bloqueada) yield break;
-            yield return new WaitForSeconds(tetris.velocidad);
-            MoverAbajo();
+            Tetris.instance.FinalizarPartida();
+            Destroy(gameObject);
         }
+        //si hay posicines libres, la partida sigue
+        else
+        {
+            while (true)
+            {
+                if (bloqueada) yield break;
+                yield return new WaitForSeconds(tetris.velocidad);
+                MoverAbajo();
+            }
+        }
+    }
+
+    void MoverArriba()
+    {        
+        while (!bloqueada) MoverAbajo();
     }
 
     void MoverAbajo()
@@ -219,7 +219,8 @@ public class PiezaTetris : MonoBehaviour
     }
 
     void FijarPieza()
-    {
+    {       
+
         //ponemos a true las posiciones para ocuparlas
         tetris.tablero[posCubo1.fila][posCubo1.columna] = cubo1;
         tetris.tablero[posCubo2.fila][posCubo2.columna] = cubo2;
@@ -376,7 +377,7 @@ public class PiezaTetris : MonoBehaviour
         //eliminamos los que están por debajo de 0
         GameObject[] cubos = GameObject.FindGameObjectsWithTag("cubo");
         foreach (GameObject cubo in cubos)
-            if (cubo.transform.position.y < 0) Destroy(cubo);        
+            if (cubo.transform.position.y < 0) Destroy(cubo);
 
         //comprobamos de nuevo después de modificar
         EliminarFilasCompletadas();
