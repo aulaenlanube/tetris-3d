@@ -170,11 +170,31 @@ public class PiezaTetris : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) Rotar();
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) MoverIzquierda();
-        if (Input.GetKeyDown(KeyCode.RightArrow)) MoverDerecha();
-        if (Input.GetKeyDown(KeyCode.UpArrow)) MoverArriba();
-        if (Input.GetKeyDown(KeyCode.DownArrow)) MoverAbajo();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Rotar();
+            tetris.ReproducirSonidoMoverGirarPieza();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            MoverIzquierda();
+            tetris.ReproducirSonidoMoverGirarPieza();
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            MoverDerecha();
+            tetris.ReproducirSonidoMoverGirarPieza();
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            MoverArriba();
+            tetris.ReproducirSonidoMoverGirarPieza();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            MoverAbajo();
+            tetris.ReproducirSonidoMoverGirarPieza();
+        }
     }
 
     IEnumerator BajarPieza()
@@ -183,6 +203,7 @@ public class PiezaTetris : MonoBehaviour
         if (!tetris.ComprobarInferioresLibres(posCubo1, posCubo2, posCubo3, posCubo4))
         {
             Tetris.instance.FinalizarPartida();
+            tetris.ReproducirSonidoGameOver();
             Destroy(gameObject);
         }
         //si hay posicines libres, la partida sigue
@@ -352,6 +373,7 @@ public class PiezaTetris : MonoBehaviour
                     //eliminamos cubos y bajamos la parte superior del tablero respecto a la fila que debemos eliminar
                     BajarFila(fila);
                     tetris.ActualizarPuntuacion();
+                    tetris.ReproducirSonidoEliminarLinea();
                     return;
                 }
             }

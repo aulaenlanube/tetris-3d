@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641228, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -749,10 +749,14 @@ MonoBehaviour:
   anchoTablero: 12
   altoTablero: 22
   velocidad: 0.2
-  profundidadPieza: 0
+  profundidadPieza: 1
   piezaDistintas: 5
   materialPiezas: {fileID: 2100000, guid: 1ec889ee48746a34794902b0cda61655, type: 2}
   materialParedes: {fileID: 2100000, guid: 936c601b91470fe49ab67e964eab67a7, type: 2}
+  melodia: {fileID: 0}
+  efectoSonidoMoverGirar: {fileID: 0}
+  efectoSonidoEliminarLinea: {fileID: 0}
+  efectoSonidoGameOver: {fileID: 0}
 --- !u!1 &1991033088
 GameObject:
   m_ObjectHideFlags: 0
