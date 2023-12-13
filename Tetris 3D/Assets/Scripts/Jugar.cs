@@ -1,0 +1,164 @@
+using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class Jugar : MonoBehaviour
+{
+    //partida por defecto
+    [SerializeField][Range(10,22)] private int filas = 22;
+    [SerializeField][Range(4, 20)] private int columnas = 12;
+    [SerializeField][Range(10, 22)] private int piezas = 5;
+    [SerializeField][Range(0.05f, 1f)] private float velocidad = 1f;
+    [SerializeField][Range(0f, 1f)] private float profundidad = 1f;
+
+    //engranaje
+    [SerializeField] private RectTransform engranaje;
+
+    //dificultad
+    [SerializeField] private Slider sliderDificultad;
+    [SerializeField] private TextMeshProUGUI textoDificultad;
+
+    //columnas
+    [SerializeField] private Slider sliderColumnas;
+    [SerializeField] private TextMeshProUGUI textoColumnas;
+
+    //filas
+    [SerializeField] private Slider sliderFilas;
+    [SerializeField] private TextMeshProUGUI textoFilas;
+
+    //piezas
+    [SerializeField] private Slider sliderPiezas;
+    [SerializeField] private TextMeshProUGUI textoPiezas;
+
+    //profundidad
+    [SerializeField] private Slider sliderProfundidad;
+    [SerializeField] private TextMeshProUGUI textoProfundidad;
+
+    private bool opcionesVisibles;
+
+    private void Start()
+    {
+        //cargamos datos por defecto
+        DatosPartida.Instance.filas = filas;
+        DatosPartida.Instance.columnas = columnas;
+        DatosPartida.Instance.piezas = piezas;
+        DatosPartida.Instance.velocidad = velocidad;
+        DatosPartida.Instance.profundidad = velocidad;
+
+        //agregamos los listeners de los sliders
+        sliderDificultad?.onValueChanged.AddListener(DificultadModificada);
+        sliderColumnas?.onValueChanged.AddListener(ColumnasModificadas);
+        sliderFilas?.onValueChanged.AddListener(FilasModificadas);
+        sliderPiezas?.onValueChanged.AddListener(PiezasModificada);
+        sliderProfundidad?.onValueChanged.AddListener(ProfundidadModificada);
+
+        //booleano para mostrar/ocultar opciones
+        opcionesVisibles = false;
+    }    
+
+    public void InciarPartida(string nombreEscena)
+    {
+        SceneManager.LoadScene(nombreEscena);
+    }
+
+    public void MostrarOcultarOpciones()
+    {
+        if (!opcionesVisibles)
+        {
+            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.up * 400f, 1f));
+            opcionesVisibles = true;
+        }
+        else
+        {
+            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.down * 400f, 1f));
+            opcionesVisibles = false;
+        }
+    }
+
+    IEnumerator Mover(Vector3 objetivo, float duracion)
+    {
+        Vector3 puntoInicial = GetComponent<RectTransform>().position;
+        float tiempoPasado = 0;
+
+        while (tiempoPasado < duracion)
+        {
+            tiempoPasado += Time.deltaTime;
+
+            //movimiento del RectTransform principal de la UI
+            Vector3 posActual = GetComponent<RectTransform>().position;
+            float posY = Mathf.SmoothStep(puntoInicial.y, objetivo.y, tiempoPasado / duracion);
+            GetComponent<RectTransform>().position = new Vector3(posActual.x, posY, posActual.z);
+            
+            //rotación del engranaje
+            engranaje.Rotate(new Vector3(0, 0, 5));
+
+            yield return null;
+        }
+    }
+
+    private void DificultadModificada(float valorSlider)
+    {      
+        //ajustamos el texto
+        string dificultad = Mathf.RoundToInt(valorSlider) switch
+        {   
+            1 => "Fácil",
+            2 => "Medio",
+            3 => "Difícil",
+            4 => "Pesadilla",
+            _ => "Error"
+        };
+        textoDificultad.text = dificultad;
+
+        //ajustamos la velocidad
+        float velocidad = Mathf.RoundToInt(valorSlider) switch
+        {
+            1 => 1f,
+            2 => 0.5f,
+            3 => 0.2f,
+            4 => 0.05f,
+            _ => 1f
+        };
+
+        DatosPartida.Instance.velocidad = velocidad;
+    }
+
+    private void PiezasModificada(float valorSlider)
+    { 
+        int piezas = Mathf.RoundToInt(valorSlider);
+        DatosPartida.Instance.piezas = piezas;
+        textoPiezas.text = piezas.ToString();
+    }
+
+    private void FilasModificadas(float valorSlider)
+    {
+        int filas = Mathf.RoundToInt(valorSlider);
+        DatosPartida.Instance.filas = filas;
+        textoFilas.text = filas.ToString();
+    }
+
+    private void ColumnasModificadas(float valorSlider)
+    {
+        int columnas = Mathf.RoundToInt(valorSlider);
+        DatosPartida.Instance.columnas = columnas;
+        textoColumnas.text = columnas.ToString();
+    }
+
+    private void ProfundidadModificada(float valorSlider)
+    {
+        //ajustamos la profundidad de la pieza
+        float profundidad = Mathf.RoundToInt(valorSlider) switch
+        {
+            1 => 0f,
+            2 => 0.25f,
+            3 => 0.5f,
+            4 => 0.75f,
+            5 => 1f,
+            _ => 0f
+        };
+
+        DatosPartida.Instance.profundidad = profundidad;
+        textoProfundidad.text = Mathf.RoundToInt(valorSlider).ToString();
+    }
+}

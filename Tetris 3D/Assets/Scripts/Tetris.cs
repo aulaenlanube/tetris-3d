@@ -10,7 +10,7 @@ public class Tetris : MonoBehaviour
     [Range(4, 20)]
     public int anchoTablero = 12;
 
-    [Range(12, 22)]
+    [Range(10, 22)]
     public int altoTablero = 22;
 
     [Range(0.05f, 1f)]
@@ -44,12 +44,23 @@ public class Tetris : MonoBehaviour
     }
     private void Start()
     {
+        LeerDatos(); //leemos los datos desde el singleton DatosPartida
+
         GenerarParedes();
         GenerarTablero();
         GenerarPieza();
 
         puntuacion = 0;
         puntuacionActualizada?.Invoke(puntuacion);
+    }
+
+    public void LeerDatos()
+    {
+        anchoTablero = DatosPartida.Instance.columnas;
+        altoTablero = DatosPartida.Instance.filas;
+        piezaDistintas = DatosPartida.Instance.piezas;
+        velocidad = DatosPartida.Instance.velocidad;
+        profundidadPieza = DatosPartida.Instance.profundidad;
     }
 
     private void GenerarParedes()
@@ -184,14 +195,14 @@ public class Tetris : MonoBehaviour
     //efectos de sonido
     public void ReproducirSonidoGameOver()
     {        
-        efectoSonidoGameOver.GetComponent<AudioSource>().Play();
+        efectoSonidoGameOver.Play();
     }
     public void ReproducirSonidoEliminarLinea()
     {        
-        efectoSonidoEliminarLinea.GetComponent<AudioSource>().Play();
+        efectoSonidoEliminarLinea.Play();
     }
     public void ReproducirSonidoMoverGirarPieza()
     {        
-        efectoSonidoMoverGirar.GetComponent<AudioSource>().Play();
+        efectoSonidoMoverGirar.Play();
     }
 }
