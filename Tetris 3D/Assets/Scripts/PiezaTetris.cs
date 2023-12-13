@@ -209,9 +209,15 @@ public class PiezaTetris : MonoBehaviour
         //si hay posicines libres, la partida sigue
         else
         {
+            float velocidadActual = tetris.velocidad; 
             while (true)
-            {
-                if (bloqueada) yield break;
+            {                
+                if (bloqueada)
+                {
+                    tetris.velocidad = velocidadActual; //volvemos a poner la velocidad a como estaba al salir la pieza
+                    yield break;
+                }
+                
                 yield return new WaitForSeconds(tetris.velocidad);
                 MoverAbajo();
             }
@@ -219,8 +225,8 @@ public class PiezaTetris : MonoBehaviour
     }
 
     void MoverArriba()
-    {        
-        while (!bloqueada) MoverAbajo();
+    {
+        tetris.velocidad = 0; // utilizado para resolver el bug de pieza doble
     }
 
     void MoverAbajo()
