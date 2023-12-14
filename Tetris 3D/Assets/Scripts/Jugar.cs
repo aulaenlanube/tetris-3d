@@ -65,14 +65,17 @@ public class Jugar : MonoBehaviour
 
     public void MostrarOcultarOpciones()
     {
+        //obtenemos el 70% de la pantalla para desplazar el RectTransform
+        float alturaRectTransform = transform.parent.gameObject.GetComponent<RectTransform>().sizeDelta.y * 0.7f;
+        
         if (!opcionesVisibles)
         {
-            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.up * 400f, 1f));
+            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.up * alturaRectTransform, 1f));
             opcionesVisibles = true;
         }
         else
         {
-            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.down * 400f, 1f));
+            StartCoroutine(Mover(GetComponent<RectTransform>().position + Vector3.down * alturaRectTransform, 1f));
             opcionesVisibles = false;
         }
     }
