@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -164,4 +165,5 @@ public class Jugar : MonoBehaviour
         DatosPartida.Instance.profundidad = profundidad;
         textoProfundidad.text = Mathf.RoundToInt(valorSlider).ToString();
     }
+
 }
