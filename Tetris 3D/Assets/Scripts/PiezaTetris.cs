@@ -170,31 +170,36 @@ public class PiezaTetris : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!Tetris.instance.JuegoPausado())
         {
-            Rotar();
-            tetris.ReproducirSonidoMoverGirarPieza();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Rotar();
+                tetris.ReproducirSonidoMoverGirarPieza();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                MoverIzquierda();
+                tetris.ReproducirSonidoMoverGirarPieza();
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                MoverDerecha();
+                tetris.ReproducirSonidoMoverGirarPieza();
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                MoverArriba();
+                tetris.ReproducirSonidoMoverGirarPieza();
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                MoverAbajo();
+                tetris.ReproducirSonidoMoverGirarPieza();
+            }
+
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            MoverIzquierda();
-            tetris.ReproducirSonidoMoverGirarPieza();
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            MoverDerecha();
-            tetris.ReproducirSonidoMoverGirarPieza();
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            MoverArriba();
-            tetris.ReproducirSonidoMoverGirarPieza();
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            MoverAbajo();
-            tetris.ReproducirSonidoMoverGirarPieza();
-        }
+
     }
 
     IEnumerator BajarPieza()
@@ -209,15 +214,15 @@ public class PiezaTetris : MonoBehaviour
         //si hay posicines libres, la partida sigue
         else
         {
-            float velocidadActual = tetris.velocidad; 
+            float velocidadActual = tetris.velocidad;
             while (true)
-            {                
+            {
                 if (bloqueada)
                 {
                     tetris.velocidad = velocidadActual; //volvemos a poner la velocidad a como estaba al salir la pieza
                     yield break;
                 }
-                
+
                 yield return new WaitForSeconds(tetris.velocidad);
                 MoverAbajo();
             }
@@ -246,7 +251,7 @@ public class PiezaTetris : MonoBehaviour
     }
 
     void FijarPieza()
-    {       
+    {
 
         //ponemos a true las posiciones para ocuparlas
         tetris.tablero[posCubo1.fila][posCubo1.columna] = cubo1;

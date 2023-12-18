@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Tetris : MonoBehaviour
 {  
@@ -22,16 +23,29 @@ public class Tetris : MonoBehaviour
     public Material materialPiezas;
     public Material materialParedes;
       
+    //eventos puntuación y gameOver
     public delegate void puntuacionTetris(int n);    
     public static event puntuacionTetris puntuacionActualizada;
     public static event puntuacionTetris gameOverTetris;
+
+    //evento pausa
+    public delegate void pausaJuego(bool b);
+    public static event pausaJuego juegoPausado;
+
+    //singleton para acceder al Tetris
     public static Tetris instance;
     
-    private int puntuacion;
+    private int puntuacion;    
    
     [SerializeField] private AudioSource efectoSonidoMoverGirar;
     [SerializeField] private AudioSource efectoSonidoEliminarLinea;
     [SerializeField] private AudioSource efectoSonidoGameOver;
+
+    private bool pause;
+
+    [SerializeField] private GameObject panelPausa;
+    [SerializeField] private GameObject botonPausa;
+    [SerializeField] private GameObject panelGameOver;
 
 
     private void Awake()
@@ -48,6 +62,7 @@ public class Tetris : MonoBehaviour
         GenerarTablero();
         GenerarPieza();
 
+        pause = false;
         puntuacion = 0;
         puntuacionActualizada?.Invoke(puntuacion);
     }
@@ -191,6 +206,7 @@ public class Tetris : MonoBehaviour
 
     public void FinalizarPartida()
     {
+        MostrarPanelGameOver();
         gameOverTetris?.Invoke(puntuacion);
     }
 
@@ -206,5 +222,43 @@ public class Tetris : MonoBehaviour
     public void ReproducirSonidoMoverGirarPieza()
     {        
         efectoSonidoMoverGirar.Play();
+    }
+
+    public void PausarReanudarJuego()
+    {
+        if(pause)
+        {
+            pause = false;
+            juegoPausado?.Invoke(pause); //publicamos evento de pausa
+            Time.timeScale = 1f; // reanuda el tiempo del juego
+            panelPausa.SetActive(false);
+            botonPausa.SetActive(true);
+            
+        }
+        else
+        { 
+            pause = true;
+            juegoPausado?.Invoke(pause); //publicamos evento de pausa
+            Time.timeScale = 0f; // detiene el tiempo del juego
+            panelPausa.SetActive(true);
+            botonPausa.SetActive(false);
+        }       
+    }
+
+    public void IniciarReiniciarPartida(string nombreEscena)
+    {
+        Time.timeScale = 1f; // reanuda el tiempo del juego
+        SceneManager.LoadScene(nombreEscena);
+    }
+
+    public void MostrarPanelGameOver()
+    {        
+        botonPausa.SetActive(false);
+        panelGameOver.SetActive(true);
+    }
+
+    public bool JuegoPausado()
+    {
+        return pause;
     }
 }
