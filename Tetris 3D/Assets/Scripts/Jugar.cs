@@ -46,7 +46,7 @@ public class Jugar : MonoBehaviour
         DatosPartida.Instance.columnas = columnas;
         DatosPartida.Instance.piezas = piezas;
         DatosPartida.Instance.velocidad = velocidad;
-        DatosPartida.Instance.profundidad = velocidad;
+        DatosPartida.Instance.profundidad = profundidad;
 
         //agregamos los listeners de los sliders
         sliderDificultad?.onValueChanged.AddListener(DificultadModificada);

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Tetris : MonoBehaviour
 {  
@@ -42,6 +39,7 @@ public class Tetris : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(gameObject);
     }
+
     private void Start()
     {
         LeerDatos(); //leemos los datos desde el singleton DatosPartida
@@ -56,11 +54,15 @@ public class Tetris : MonoBehaviour
 
     public void LeerDatos()
     {
-        anchoTablero = DatosPartida.Instance.columnas;
-        altoTablero = DatosPartida.Instance.filas;
-        piezaDistintas = DatosPartida.Instance.piezas;
-        velocidad = DatosPartida.Instance.velocidad;
-        profundidadPieza = DatosPartida.Instance.profundidad;
+        //si tenemos datos configurados en la escena de inicio, los cargamos
+        if(DatosPartida.Instance)
+        {
+            anchoTablero = DatosPartida.Instance.columnas;
+            altoTablero = DatosPartida.Instance.filas;
+            piezaDistintas = DatosPartida.Instance.piezas;
+            velocidad = DatosPartida.Instance.velocidad;
+            profundidadPieza = DatosPartida.Instance.profundidad;
+        }              
     }
 
     private void GenerarParedes()
