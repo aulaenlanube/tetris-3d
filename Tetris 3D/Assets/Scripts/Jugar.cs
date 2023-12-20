@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class Jugar : MonoBehaviour
     [SerializeField][Range(10, 22)] private int piezas = 5;
     [SerializeField][Range(0.05f, 1f)] private float velocidad = 1f;
     [SerializeField][Range(0f, 1f)] private float profundidad = 1f;
+    [SerializeField][Range(0, 4)] private int estiloTexto = 0;
 
     //engranaje
     [SerializeField] private RectTransform engranaje;
@@ -36,6 +38,10 @@ public class Jugar : MonoBehaviour
     [SerializeField] private Slider sliderProfundidad;
     [SerializeField] private TextMeshProUGUI textoProfundidad;
 
+    //estilo texto
+    [SerializeField] private Slider sliderEstiloTexto;
+    [SerializeField] private TextMeshProUGUI textoEstiloTexto;
+
     private bool opcionesVisibles;
 
     private void Start()
@@ -46,6 +52,7 @@ public class Jugar : MonoBehaviour
         DatosPartida.Instance.piezas = piezas;
         DatosPartida.Instance.velocidad = velocidad;
         DatosPartida.Instance.profundidad = profundidad;
+        DatosPartida.Instance.estiloTexto = estiloTexto;
 
         //agregamos los listeners de los sliders
         sliderDificultad?.onValueChanged.AddListener(DificultadModificada);
@@ -53,10 +60,12 @@ public class Jugar : MonoBehaviour
         sliderFilas?.onValueChanged.AddListener(FilasModificadas);
         sliderPiezas?.onValueChanged.AddListener(PiezasModificada);
         sliderProfundidad?.onValueChanged.AddListener(ProfundidadModificada);
+        sliderEstiloTexto?.onValueChanged.AddListener(EstiloModificado);
 
         //booleano para mostrar/ocultar opciones
         opcionesVisibles = false;
-    }    
+    }
+
 
     public void InciarPartida(string nombreEscena)
     {
@@ -106,10 +115,10 @@ public class Jugar : MonoBehaviour
         //ajustamos el texto
         string dificultad = Mathf.RoundToInt(valorSlider) switch
         {   
-            1 => "Fácil",
+            1 => "Min",
             2 => "Medio",
-            3 => "Difícil",
-            4 => "Pesadilla",
+            3 => "Hard",
+            4 => "Max",
             _ => "Error"
         };
         textoDificultad.text = dificultad;
@@ -163,6 +172,15 @@ public class Jugar : MonoBehaviour
 
         DatosPartida.Instance.profundidad = profundidad;
         textoProfundidad.text = Mathf.RoundToInt(valorSlider).ToString();
+    }
+
+
+    private void EstiloModificado(float valorSlider)
+    {
+        int estiloTexto = Mathf.RoundToInt(valorSlider);
+        DatosPartida.Instance.estiloTexto = estiloTexto;
+        textoEstiloTexto.text = estiloTexto.ToString();
+        TextosTetris.Instance.ActualizarEstilosTextos(estiloTexto);
     }
 
 }

@@ -8,7 +8,8 @@ public class DatosPartida : MonoBehaviour
     public int columnas;
     public int piezas;
     public float velocidad;
-    public float profundidad;    
+    public float profundidad;
+    public int estiloTexto;
 
     void Awake()
     {

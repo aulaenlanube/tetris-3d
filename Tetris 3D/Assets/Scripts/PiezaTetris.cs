@@ -219,7 +219,7 @@ public class PiezaTetris : MonoBehaviour
             {
                 if (bloqueada)
                 {
-                    tetris.velocidad = velocidadActual; //volvemos a poner la velocidad a como estaba al salir la pieza
+                    tetris.velocidad = velocidadActual; //volvemos a poner la velocidad a como estaba al salir la pieza, debemos utilizar corrutinas para que se actualice la velocidad
                     yield break;
                 }
 

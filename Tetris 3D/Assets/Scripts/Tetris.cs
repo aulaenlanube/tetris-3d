@@ -32,6 +32,11 @@ public class Tetris : MonoBehaviour
     public delegate void pausaJuego(bool b);
     public static event pausaJuego juegoPausado;
 
+    //evento textos
+    public delegate void modificarEstiloTexto(int n);
+    public static event modificarEstiloTexto estiloTextoActualizado;
+
+
     //singleton para acceder al Tetris
     public static Tetris instance;
     
@@ -46,6 +51,8 @@ public class Tetris : MonoBehaviour
     [SerializeField] private GameObject panelPausa;
     [SerializeField] private GameObject botonPausa;
     [SerializeField] private GameObject panelGameOver;
+
+    private int estiloTextos;
 
 
     private void Awake()
@@ -64,7 +71,9 @@ public class Tetris : MonoBehaviour
 
         pause = false;
         puntuacion = 0;
+        estiloTextos = 0;
         puntuacionActualizada?.Invoke(puntuacion);
+        estiloTextoActualizado?.Invoke(estiloTextos);
     }
 
     public void LeerDatos()
@@ -77,6 +86,7 @@ public class Tetris : MonoBehaviour
             piezaDistintas = DatosPartida.Instance.piezas;
             velocidad = DatosPartida.Instance.velocidad;
             profundidadPieza = DatosPartida.Instance.profundidad;
+            estiloTextos = DatosPartida.Instance.estiloTexto;
         }              
     }
 
@@ -133,8 +143,9 @@ public class Tetris : MonoBehaviour
         puntuacionActualizada?.Invoke(puntuacion);        
 
         //modificación de la velocidad, plantear solución logaritmíca que tienda a 0.05
-        if (velocidad > 0.1) velocidad -= 0.01f;
+        if (velocidad > 0.1) velocidad -= 0.01f; 
         else if (velocidad > 0.05) velocidad -= 0.005f;
+        
     }
 
     public bool ComprobarInferioresLibres(PosicionTetris cubo1, PosicionTetris cubo2, PosicionTetris cubo3, PosicionTetris cubo4)
@@ -223,7 +234,7 @@ public class Tetris : MonoBehaviour
     {        
         efectoSonidoMoverGirar.Play();
     }
-
+    
     public void PausarReanudarJuego()
     {
         if(pause)
