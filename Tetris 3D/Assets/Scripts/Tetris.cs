@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class Tetris : MonoBehaviour
 {  
     public GameObject[][] tablero;
@@ -42,9 +43,9 @@ public class Tetris : MonoBehaviour
     
     private int puntuacion;    
    
-    [SerializeField] private AudioSource efectoSonidoMoverGirar;
-    [SerializeField] private AudioSource efectoSonidoEliminarLinea;
-    [SerializeField] private AudioSource efectoSonidoGameOver;
+    [SerializeField] private AudioClip efectoSonidoMoverGirar;
+    [SerializeField] private AudioClip efectoSonidoEliminarLinea;
+    [SerializeField] private AudioClip efectoSonidoGameOver;
 
     private bool pause;
 
@@ -224,15 +225,15 @@ public class Tetris : MonoBehaviour
     //efectos de sonido
     public void ReproducirSonidoGameOver()
     {        
-        efectoSonidoGameOver.Play();
+        GetComponent<AudioSource>().PlayOneShot(efectoSonidoGameOver);
     }
     public void ReproducirSonidoEliminarLinea()
-    {        
-        efectoSonidoEliminarLinea.Play();
+    {
+        GetComponent<AudioSource>().PlayOneShot(efectoSonidoEliminarLinea);
     }
     public void ReproducirSonidoMoverGirarPieza()
-    {        
-        efectoSonidoMoverGirar.Play();
+    {
+        GetComponent<AudioSource>().PlayOneShot(efectoSonidoMoverGirar);
     }
     
     public void PausarReanudarJuego()
