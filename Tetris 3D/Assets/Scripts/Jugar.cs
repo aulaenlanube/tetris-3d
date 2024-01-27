@@ -47,12 +47,12 @@ public class Jugar : MonoBehaviour
     private void Start()
     {
         //cargamos datos por defecto
-        DatosPartida.Instance.filas = filas;
-        DatosPartida.Instance.columnas = columnas;
-        DatosPartida.Instance.piezas = piezas;
-        DatosPartida.Instance.velocidad = velocidad;
-        DatosPartida.Instance.profundidad = profundidad;
-        DatosPartida.Instance.estiloTexto = estiloTexto;
+        DatosPartida.Instancia.Filas = filas;
+        DatosPartida.Instancia.Columnas = columnas;
+        DatosPartida.Instancia.Piezas = piezas;
+        DatosPartida.Instancia.Velocidad = velocidad;
+        DatosPartida.Instancia.Profundidad = profundidad;
+        DatosPartida.Instancia.EstiloTexto = estiloTexto;
 
         //agregamos los listeners de los sliders
         sliderDificultad?.onValueChanged.AddListener(DificultadModificada);
@@ -133,27 +133,27 @@ public class Jugar : MonoBehaviour
             _ => 1f
         };
 
-        DatosPartida.Instance.velocidad = velocidad;
+        DatosPartida.Instancia.Velocidad = velocidad;
     }
 
     private void PiezasModificada(float valorSlider)
     { 
         int piezas = Mathf.RoundToInt(valorSlider);
-        DatosPartida.Instance.piezas = piezas;
+        DatosPartida.Instancia.Piezas = piezas;
         textoPiezas.text = piezas.ToString();
     }
 
     private void FilasModificadas(float valorSlider)
     {
         int filas = Mathf.RoundToInt(valorSlider);
-        DatosPartida.Instance.filas = filas;
+        DatosPartida.Instancia.Filas = filas;
         textoFilas.text = filas.ToString();
     }
 
     private void ColumnasModificadas(float valorSlider)
     {
         int columnas = Mathf.RoundToInt(valorSlider);
-        DatosPartida.Instance.columnas = columnas;
+        DatosPartida.Instancia.Columnas = columnas;
         textoColumnas.text = columnas.ToString();
     }
 
@@ -170,7 +170,7 @@ public class Jugar : MonoBehaviour
             _ => 0f
         };
 
-        DatosPartida.Instance.profundidad = profundidad;
+        DatosPartida.Instancia.Profundidad = profundidad;
         textoProfundidad.text = Mathf.RoundToInt(valorSlider).ToString();
     }
 
@@ -178,7 +178,7 @@ public class Jugar : MonoBehaviour
     private void EstiloModificado(float valorSlider)
     {
         int estiloTexto = Mathf.RoundToInt(valorSlider);
-        DatosPartida.Instance.estiloTexto = estiloTexto;
+        DatosPartida.Instancia.EstiloTexto = estiloTexto;
         textoEstiloTexto.text = estiloTexto.ToString();
         TextosTetris.Instance.ActualizarEstilosTextos(estiloTexto);
     }

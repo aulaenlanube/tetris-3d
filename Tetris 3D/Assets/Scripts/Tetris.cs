@@ -3,27 +3,28 @@ using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class Tetris : MonoBehaviour
-{  
-    public GameObject[][] tablero;
+{
+    //configuración del juego
+    [SerializeField][Range(4, 20)] private int anchoTablero = 12;
+    [SerializeField][Range(10, 22)] private int altoTablero = 22;
+    [SerializeField][Range(0.05f, 1f)] private float velocidad = 0.5f;
+    [SerializeField][Range(0f, 1f)] private float profundidadPieza;
+    [SerializeField][Range(1, 5)] private int piezaDistintas;
+    [SerializeField] private AudioClip efectoSonidoMoverGirar;
+    [SerializeField] private AudioClip efectoSonidoEliminarLinea;
+    [SerializeField] private AudioClip efectoSonidoGameOver;
+    [SerializeField] private GameObject panelPausa;
+    [SerializeField] private GameObject botonPausa;
+    [SerializeField] private GameObject panelGameOver;
+    [SerializeField] private Material materialPiezas;
+    [SerializeField] private Material materialParedes;
 
-    [Range(4, 20)]
-    public int anchoTablero = 12;
-
-    [Range(10, 22)]
-    public int altoTablero = 22;
-
-    [Range(0.05f, 1f)]
-    public float velocidad = 0.5f;
-
-    [Range(0f, 1f)]
-    public float profundidadPieza;
-
-    [Range(1, 5)]
-    public int piezaDistintas;
-
-    public Material materialPiezas;
-    public Material materialParedes;
-      
+    //propiedades de control
+    private GameObject[][] tablero;
+    private bool pause;
+    private int puntuacion; 
+    private int estiloTextos;        
+    
     //eventos puntuación y gameOver
     public delegate void puntuacionTetris(int n);    
     public static event puntuacionTetris puntuacionActualizada;
@@ -37,35 +38,83 @@ public class Tetris : MonoBehaviour
     public delegate void modificarEstiloTexto(int n);
     public static event modificarEstiloTexto estiloTextoActualizado;
 
-
-    //singleton para acceder al Tetris
-    public static Tetris instance;
-    
-    private int puntuacion;    
-   
-    [SerializeField] private AudioClip efectoSonidoMoverGirar;
-    [SerializeField] private AudioClip efectoSonidoEliminarLinea;
-    [SerializeField] private AudioClip efectoSonidoGameOver;
-
-    private bool pause;
-
-    [SerializeField] private GameObject panelPausa;
-    [SerializeField] private GameObject botonPausa;
-    [SerializeField] private GameObject panelGameOver;
-
-    private int estiloTextos;
-
+    //-----------------------------------------------------
+    //----------------- SINGLETON TETRIS ------------------
+    //-----------------------------------------------------
+    public static Tetris Instancia { get; private set; }
 
     private void Awake()
     {           
-        if (instance == null) instance = this;
+        if (Instancia == null) Instancia = this;
         else Destroy(gameObject);
     }
 
+    private void OnDestroy()
+    {
+        if (Instancia == this) Instancia = null;        
+    }
+
+    //-----------------------------------------------------
+    //----------------- GETTERS Y SETTERS -----------------
+    //-----------------------------------------------------
+    public int AnchoTablero
+    {
+        get { return anchoTablero; }
+        set { anchoTablero = value; }
+    }
+    public int AltoTablero
+    {
+        get { return altoTablero; }
+        set { altoTablero = value; }
+    }
+    public float Velocidad
+    {
+        get { return velocidad; }
+        set { velocidad = value; }
+    }
+    public float ProfundidadPieza
+    {
+        get { return profundidadPieza; }
+        set { profundidadPieza = value; }
+    }
+    public int PiezaDistintas
+    {
+        get { return piezaDistintas; }
+        set { piezaDistintas = value; }
+    }
+    public Material MaterialPiezas
+    {
+        get { return materialPiezas; }
+        set { materialPiezas = value; }
+    }
+    public Material MaterialParedes
+    {
+        get { return materialParedes; }
+        set { materialParedes = value; }
+    }
+    public int Puntuacion
+    {
+        get { return puntuacion; }
+        set { puntuacion = value; }
+    }
+    public int EstiloTextos
+    {
+        get { return estiloTextos; }
+        set { estiloTextos = value; }
+    }
+    public GameObject[][] Tablero
+    {
+        get { return tablero; }
+        set { tablero = value; }
+    }
+
+    //-----------------------------------------------------
+    //----------------- MÉTODOS ---------------------------
+    //-----------------------------------------------------
+
     private void Start()
     {
-        LeerDatos(); //leemos los datos desde el singleton DatosPartida
-
+        LeerDatos();
         GenerarParedes();
         GenerarTablero();
         GenerarPieza();
@@ -80,14 +129,14 @@ public class Tetris : MonoBehaviour
     public void LeerDatos()
     {
         //si tenemos datos configurados en la escena de inicio, los cargamos
-        if(DatosPartida.Instance)
+        if(DatosPartida.Instancia)
         {
-            anchoTablero = DatosPartida.Instance.columnas;
-            altoTablero = DatosPartida.Instance.filas;
-            piezaDistintas = DatosPartida.Instance.piezas;
-            velocidad = DatosPartida.Instance.velocidad;
-            profundidadPieza = DatosPartida.Instance.profundidad;
-            estiloTextos = DatosPartida.Instance.estiloTexto;
+            anchoTablero = DatosPartida.Instancia.Columnas;
+            altoTablero = DatosPartida.Instancia.Filas;
+            piezaDistintas = DatosPartida.Instancia.Piezas;
+            velocidad = DatosPartida.Instancia.Velocidad;
+            profundidadPieza = DatosPartida.Instancia.Profundidad;
+            estiloTextos = DatosPartida.Instancia.EstiloTexto;
         }              
     }
 
@@ -145,8 +194,7 @@ public class Tetris : MonoBehaviour
 
         //modificación de la velocidad, plantear solución logaritmíca que tienda a 0.05
         if (velocidad > 0.1) velocidad -= 0.01f; 
-        else if (velocidad > 0.05) velocidad -= 0.005f;
-        
+        else if (velocidad > 0.05) velocidad -= 0.005f;        
     }
 
     public bool ComprobarInferioresLibres(PosicionTetris cubo1, PosicionTetris cubo2, PosicionTetris cubo3, PosicionTetris cubo4)
@@ -222,7 +270,10 @@ public class Tetris : MonoBehaviour
         gameOverTetris?.Invoke(puntuacion);
     }
 
-    //efectos de sonido
+    //-----------------------------------------------------
+    //----------------- EFECTOS DE SONIDO -----------------
+    //-----------------------------------------------------
+ 
     public void ReproducirSonidoGameOver()
     {        
         GetComponent<AudioSource>().PlayOneShot(efectoSonidoGameOver);
@@ -235,7 +286,10 @@ public class Tetris : MonoBehaviour
     {
         GetComponent<AudioSource>().PlayOneShot(efectoSonidoMoverGirar);
     }
-    
+
+    //-----------------------------------------------------
+    //----------------- PANELES ---------------------------
+    //-----------------------------------------------------
     public void PausarReanudarJuego()
     {
         if(pause)

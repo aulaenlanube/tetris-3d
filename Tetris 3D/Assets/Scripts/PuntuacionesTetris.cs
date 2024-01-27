@@ -5,8 +5,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
-[Serializable]
-public class ListaPuntuacionesTetris
+[Serializable] public class ListaPuntuacionesTetris
 {
     public List<int> listaPuntuaciones;
 
@@ -53,17 +52,14 @@ public class PuntuacionesTetris
             if (i < listaPuntuaciones.Count)  puntuacionesOrdenadas[i] = listaPuntuaciones[i];            
             else  puntuacionesOrdenadas[i] = 0;            
         }
-
         return puntuacionesOrdenadas;
     }
-
 
     public void AgregarPuntuacion(int puntuacion)
     {
         puntuaciones.listaPuntuaciones.Add(puntuacion);
         GuardarPuntuacionesBinario();
     }
-
 
     public void GuardarPuntuacionesBinario()
     {
@@ -85,6 +81,4 @@ public class PuntuacionesTetris
         }
         puntuaciones = new ListaPuntuacionesTetris();
     }
-
-
 }
